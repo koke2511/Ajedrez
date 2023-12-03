@@ -1,6 +1,4 @@
-// * Para cambiar este encabezado de licencia, elige Encabezados de Licencia en Propiedades del Proyecto.
-// *  Para cambiar este archivo de plantilla, elige Herramientas | Plantillas
-// * y abre la plantilla en el editor.
+
 package Vista;
 
 import javax.swing.ImageIcon;

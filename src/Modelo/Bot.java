@@ -2,22 +2,51 @@ package Modelo;
 
 import Vista.MateHaciaNegras;
 
+/**
+ * Clase que representa el bot del juego de ajedrez.
+ */
 public class Bot {
+// Variables miembro
 
+/**
+ * Representación del tablero de ajedrez en forma de matriz de cadenas.
+ */
     String[][] tablero;
+
+/**
+ * Instancia de la clase Movimientos para gestionar los movimientos de las fichas.
+ */
     Movimientos movimientos = new Movimientos();
     boolean movimientoPrimero = true;
-    int[][] puntuacionDePosiciones = new int[8][8];
 
-    //Te retorna las posicion antigua[0] y la posicion nueva[1]
+/**
+ * Puntuación asignada a las posiciones en el tablero.
+ */
+    int[][] puntuacionDePosiciones = new int[8][8];
+    // Métodos
+
+/**
+ * Realiza el movimiento del bot en el tablero de ajedrez.
+ *
+ * @param tablero Matriz que representa el estado actual del tablero.
+ * @return Array de cadenas con la posición antigua [0] y la posición nueva [1] del movimiento.
+ */
+
     public String[] movimientoDelBot(String[][] tablero)
     {
+        // Implementación del movimiento del bot
         this.tablero = tablero;
         examinarCasillasAtacadas();
         return arregloFinal();
     }
+/**
+ * Genera el arreglo con la posición antigua y la nueva para realizar el movimiento.
+ *
+ * @return Array de cadenas con la posición antigua [0] y la posición nueva [1].
+ */
 
     private String[] arregloFinal()
+    // Implementación para determinar la posición antigua y nueva del movimiento
     {
         int puntuacionMaxima = -600;
         int yInit = 1;
@@ -89,8 +118,19 @@ public class Bot {
 
     }
 
+/**
+ * Calcula la puntuación del movimiento basada en varios criterios.
+ *
+ * @param yInit   Coordenada Y inicial del movimiento.
+ * @param xInit   Coordenada X inicial del movimiento.
+ * @param yFinal  Coordenada Y final del movimiento.
+ * @param xFinal  Coordenada X final del movimiento.
+ * @return La puntuación del movimiento.
+ */
     private int movimientoPuntuacion(int yInit, int xInit, int yFinal, int xFinal)
     {
+        // Implementación para calcular la puntuación del movimiento
+
         int puntuacion = 0;
         puntuacion += puntuacionFichaAtaque(yInit, xInit, yFinal, xFinal);
         puntuacion += puntuacionDePosiciones[yInit][xInit];
@@ -101,8 +141,19 @@ public class Bot {
         return puntuacion;
     }
 
+/**
+ * Calcula la puntuación del movimiento futuro simulando el tablero.
+ *
+ * @param yInit   Coordenada Y inicial del movimiento.
+ * @param xInit   Coordenada X inicial del movimiento.
+ * @param yFinal  Coordenada Y final del movimiento.
+ * @param xFinal  Coordenada X final del movimiento.
+ * @return La puntuación del movimiento futuro.
+ */
+
     private int puntuacionMovimientoFuturo(int yInit, int xInit, int yFinal, int xFinal)
     {
+        // Implementación para calcular la puntuación del movimiento futuro
         int puntuacion = 0;
         String tableroFuturo[][] = new String[8][8];
         copiarTablero(tableroFuturo);
@@ -126,8 +177,18 @@ public class Bot {
         }
     }
 
+/**
+ * Calcula la puntuación de la defensa de una ficha.
+ *
+ * @param tableroM Matriz del tablero.
+ * @param y       Coordenada Y de la ficha.
+ * @param x       Coordenada X de la ficha.
+ * @return La puntuación de la defensa.
+ */
+
     private int fichaDefender(String[][] tableroM, int y, int x)
     {
+        // Implementación para calcular la puntuación de defensa
         String[] ataquesEsaFicha = movimientos.ataqueFicha2(tableroM, y, x);
         int valor = 0;
         for (int i = 0; i < ataquesEsaFicha.length; ++i)
@@ -162,8 +223,16 @@ public class Bot {
         return valor;
     }
 
+/**
+ * Calcula si hay un posible jaque mate en el siguiente movimiento.
+ *
+ * @param tableroFuturo Matriz del tablero simulado.
+ * @return True si hay un posible jaque mate, de lo contrario False.
+ */
+
     private boolean posibleJaqueMate(String[][] tableroFuturo)
     {
+        // Implementación para verificar un posible jaque mate
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
@@ -198,8 +267,15 @@ public class Bot {
         return false;
     }
 
+/**
+ * Verifica si el rey blanco está en jaque mate.
+ *
+ * @param tableroM Matriz del tablero.
+ * @return True si el rey blanco está en jaque mate, de lo contrario False.
+ */
     private boolean reyBlancoJaqueMate(String[][] tableroM)
     {
+        // Implementación para verificar el jaque mate del rey blanco
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
@@ -222,6 +298,14 @@ public class Bot {
         return true;
     }
 
+/**
+ * Calcula la puntuación para defender atacando.
+ *
+ * @param tableroM Matriz del tablero.
+ * @param "y"        Coordenada Y de la ficha.
+ * @param "x"        Coordenada X de la ficha.
+ * @return La puntuación de defender atacando.
+ */
     private int puntuacionDefenderComiendo(String[][] tableroM, int yInit, int xInit, int yFinal, int xFinal)
     {
         String posicionFichaQueAtacaValiosa = posicionFichaAtacaMasValiosa(tableroM);
@@ -257,24 +341,6 @@ public class Bot {
 
     }
 
-    //Lo comento porque es una funcion que hemos creado pero no estamos usando ahora mismo.
-    /*private String buscarFichaQueLaDefiende(String[][] tableroM, String posicion)
-    {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (comprobarSiLaFichaEsBlanca(tableroM, i, j)) {
-                    String[] movimientosAtaque = movimientos.movimientoAtaqueFichaA(tableroM, i, j);
-                    for (int k = 0; k < movimientosAtaque.length; k++) {
-                        if (movimientosAtaque[k].equals(posicion)) {
-                            return tableroM[i][j];
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }*/
-
     private boolean comprobarPosicionAtaqueCoincideConLaQueAtaca(int yFinal, int xFinal, String posAtaque)
     {
         String posicionAtaca = "" + yFinal + "" + xFinal;
@@ -283,14 +349,14 @@ public class Bot {
 
     private int FichaMasValiosaAtacada(String[][] tableroM)
     {
-        String[] movimientosFichasA = movimientos.MovimientosFichas1(tableroM);
+        String[] movimientosFichas1 = movimientos.MovimientosFichas1(tableroM);
         int valorMayor = 0;
-        if (!movimientosFichasA[0].equals(""))
+        if (!movimientosFichas1[0].equals(""))
         {
-            for (int i = 0; i < movimientosFichasA.length; i++)
+            for (int i = 0; i < movimientosFichas1.length; i++)
             {
-                int y = Integer.parseInt(String.valueOf(movimientosFichasA[i].charAt(0)));
-                int x = Integer.parseInt(String.valueOf(movimientosFichasA[i].charAt(1)));
+                int y = Integer.parseInt(String.valueOf(movimientosFichas1[i].charAt(0)));
+                int x = Integer.parseInt(String.valueOf(movimientosFichas1[i].charAt(1)));
                 if (comprobarFichaEsnegra(tableroM, y, x))
                 {
                     String ficha = tableroM[y][x];
@@ -415,10 +481,10 @@ public class Bot {
     private int puntuacionDeLaCasillaSegura(int y, int x)
     {
         String posicionFinal = "" + y + "" + x;
-        String movimientosAtaqueA[] = movimientos.MovimientosFichas1(tablero);
-        for (int i = 0; i < movimientosAtaqueA.length; i++)
+        String movimientosAtaque1[] = movimientos.MovimientosFichas1(tablero);
+        for (int i = 0; i < movimientosAtaque1.length; i++)
         {
-            if (posicionFinal.equals(movimientosAtaqueA[i]))
+            if (posicionFinal.equals(movimientosAtaque1[i]))
             {
                 return -8;
             }
@@ -554,7 +620,7 @@ public class Bot {
     {
         if (!tableroM[y][x].equals(""))
         {
-            return (tableroM[y][x].charAt(0) == 'A') ? true : false;
+            return (tableroM[y][x].charAt(0) == '1') ? true : false;
         }
         return false;
     }
@@ -564,7 +630,7 @@ public class Bot {
     {
         if (!tableroM[y][x].equals(""))
         {
-            return (tableroM[y][x].charAt(0) == 'B') ? true : false;
+            return (tableroM[y][x].charAt(0) == '2') ? true : false;
         }
         return false;
     }
@@ -576,15 +642,6 @@ public class Bot {
         return ficha;
     }
 
-    //Otra funcion para comprobar la ficha de la cisilla.
-    /*private String fichaCasilla(String[][] tableroM, String posicion) {
-        char ejeY = posicion.charAt(0);
-        char ejeX = posicion.charAt(1);
-        int y = Integer.parseInt(String.valueOf(ejeY));
-        int x = Integer.parseInt(String.valueOf(ejeX));
-        String ficha = tableroM[y][x];
-        return ficha;
-    }*/
 
     private void ajustarPuntuacion()
     {
@@ -626,7 +683,7 @@ public class Bot {
     {
         String ficha1 = ficha;
 
-        if (ficha.charAt(0) == 'A' || ficha.charAt(0) == 'B')
+        if (ficha.charAt(0) == '1' || ficha.charAt(0) == '2')
         {
             ficha1 = devolverFichaSintetizada(ficha);
         }
@@ -659,7 +716,7 @@ public class Bot {
     {
         String ficha1 = ficha;
 
-        if (ficha.charAt(0) == 'A' || ficha.charAt(0) == 'B')
+        if (ficha.charAt(0) == '1' || ficha.charAt(0) == '2')
         {
             ficha1 = devolverFichaSintetizada(ficha);
         }

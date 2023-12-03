@@ -1,33 +1,45 @@
 package Modelo;
-
+/**
+ * La clase Movimientos representa movimientos en un tablero de ajedrez.
+ */
 public class Movimientos {
 
     String[][] tablero;
 
+/**
+* Copia el estado actual del tablero de ajedrez a otra matriz.
+*
+* @param arr La matriz en la que se copiará el estado del tablero de ajedrez.
+*/
+
     private void copiarTablero(String[][] arr)
     {
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
+        // Lógica para copiar el tablero de ajedrez
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
                 arr[i][j] = tablero[i][j];
             }
         }
     }
 
-    //Hacer que sea posible un moviemiento
-    public boolean posibleMovimiento(String[][] tablero, String posicionAntigua, String posicionNueva)
-    {
+/**
+ * Comprueba si un movimiento particular es posible en el tablero de ajedrez.
+ *
+ * @param tablero El estado del tablero de ajedrez.
+ * @param posicionAntigua La posición actual de la pieza.
+ * @param posicionNueva La posición a la que se moverá la pieza.
+ * @return Verdadero si el movimiento es posible; en caso contrario, falso.
+ */
+
+    public boolean posibleMovimiento(String[][] tablero, String posicionAntigua, String posicionNueva){
+        // Lógica para comprobar si un movimiento es posible
         this.tablero = tablero;
         String[] posicionesPosibles;
         posicionesPosibles = movimientos1Modificados(tablero, posicionAntigua);
 
-        if (posicionesPosibles != null)
-        {
-            for (int i = 0; i < posicionesPosibles.length; i++)
-            {
-                if (posicionesPosibles[i].equals(posicionNueva))
-                {
+        if (posicionesPosibles != null){
+            for (int i = 0; i < posicionesPosibles.length; i++){
+                if (posicionesPosibles[i].equals(posicionNueva)){
                     comprobarEnrroque(posicionAntigua);
                     return true;
                 }
@@ -36,38 +48,42 @@ public class Movimientos {
         return false;
     }
 
-    //Comrobar si las fichas siguen el patron para hacer enrroque.
-    private void comprobarEnrroque(String posAntigua)
-    {
-        if (posAntigua.equals("74"))
-        {
+/**
+ * Comprueba si las fichas siguen el patrón para realizar enroque.
+ *
+ * @param posAntigua La posición de la ficha antes del movimiento.
+ */
+    private void comprobarEnrroque(String posAntigua){
+        // Lógica para verificar y actualizar el estado del enroque
+        if (posAntigua.equals("74")){
             Controlador.Controlador.enrroqueRey1 = false;
         }
-        else if (posAntigua.equals("70"))
-        {
+        else if (posAntigua.equals("70")){
             Controlador.Controlador.enrroqueTorreIzquierda1 = false;
-        }
-        else if (posAntigua.equals("77"))
-        {
+		}
+        else if (posAntigua.equals("77")){
             Controlador.Controlador.enrroqueTorreDerecha1 = false;
         }
-        else if (posAntigua.equals("04"))
-        {
+        else if (posAntigua.equals("04")){
             Controlador.Controlador.enrroqueRey2 = false;
         }
-        else if (posAntigua.equals("00"))
-        {
+        else if (posAntigua.equals("00")){
             Controlador.Controlador.enrroqueTorreIzquierda2 = false;
         }
-        else if (posAntigua.equals("07"))
-        {
+        else if (posAntigua.equals("07")){
             Controlador.Controlador.enrroqueTorreDerecha2 = false;
         }
     }
 
-    //Comprueba los movimientos de las fichas
-    public String[] movimientos1Modificados(String[][] tableroM, String posicion)
-    {
+/**
+ * Comprueba los movimientos posibles de las fichas en una posición específica en el tablero.
+ *
+ * @param tableroM   El tablero de ajedrez actual.
+ * @param posicion   La posición en la que se encuentra la ficha.
+ * @return Un arreglo de cadenas con las posiciones a las que se puede mover la ficha.
+ */
+    public String[] movimientos1Modificados(String[][] tableroM, String posicion){
+        // Lógica para calcular los movimientos posibles de una ficha en una posición
         String[] posiblesMovimientos = movimientosFichas(tableroM, posicion);
         int x = Character.getNumericValue(posicion.charAt(1));
         int y = Character.getNumericValue(posicion.charAt(0));
@@ -75,9 +91,15 @@ public class Movimientos {
         return modificacionTodosMovimientos(tableroM, posicion, posiblesMovimientos);
     }
 
-    //Comprueba movientos fichas
-    public String[] movimientos2Modificados(String[][] tableroM, String posicion)
-    {
+/**
+ * Calcula los posibles movimientos de las fichas en una posición dada en el tablero.
+ *
+ * @param tableroM  El tablero de ajedrez actual.
+ * @param posicion  La posición actual de la ficha.
+ * @return Un arreglo de cadenas con las posiciones a las que la ficha puede moverse.
+ */
+    public String[] movimientos2Modificados(String[][] tableroM, String posicion){
+        // Lógica para calcular movimientos modificados de las fichas en una posición
         String[] posiblesMovimientos = movimientosFichas(tableroM, posicion);
         int x = Character.getNumericValue(posicion.charAt(1));
         int y = Character.getNumericValue(posicion.charAt(0));
@@ -85,8 +107,7 @@ public class Movimientos {
         return modificacionTodosMovimientos(tableroM, posicion, posiblesMovimientos);
     }
 
-    private String[] modificacionTodosMovimientos(String[][] tableroFuturo, String posicionInicial, String[] posicionesFinales)
-    {
+    private String[] modificacionTodosMovimientos(String[][] tableroFuturo, String posicionInicial, String[] posicionesFinales){
         String posicionesDefinitivas = "";
 
         int xInicial = Character.getNumericValue(posicionInicial.charAt(1));
@@ -94,12 +115,9 @@ public class Movimientos {
 
         String ficha = fichaCasilla(tableroFuturo, yInicial, xInicial);
 
-        if (posicionesFinales != null)
-        {
-            for (int i = 0; i < posicionesFinales.length; i++)
-            {
-                try
-                {
+        if (posicionesFinales != null){
+            for (int i = 0; i < posicionesFinales.length; i++){
+                try{
                     String posicionFinal = posicionesFinales[i];
                     int xFinal = Character.getNumericValue(posicionFinal.charAt(1));
                     int yFinal = Character.getNumericValue(posicionFinal.charAt(0));
@@ -111,23 +129,18 @@ public class Movimientos {
                     tableroM[yFinal][xFinal] = tableroM[yInicial][xInicial];
                     tableroM[yInicial][xInicial] = "";
 
-                    if (ficha.charAt(0) == 'A')
-                    {
-                        if (rey1Jaque(tableroM) == false)
-                        {
+                    if (ficha.charAt(0) == '1'){
+                        if (rey1Jaque(tableroM) == false){
                             posicionesDefinitivas += "" + yFinal + "" + xFinal + "_";
                         }
                     }
-                    else if (ficha.charAt(0) == 'B')
-                    {
-                        if (rey2Jaque(tableroM) == false)
-                        {
+                    else if (ficha.charAt(0) == '2'){
+                        if (rey2Jaque(tableroM) == false){
                             posicionesDefinitivas += "" + yFinal + "" + xFinal + "_";
                         }
                     }
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex){
                 }
 
             }
@@ -138,50 +151,52 @@ public class Movimientos {
         return null;
     }
 
-    private void copiarDelPrimeroAlSegundoElTablero(String[][] tableroOrigen, String[][] tableroCopia)
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
+
+/**
+* Realiza una copia del tablero de origen al tablero de copia.
+ *
+ * @param tableroOrigen El tablero original que se copiará.
+ * @param tableroCopia  El tablero donde se copiará el estado del tablero original.
+ */
+
+    private void copiarDelPrimeroAlSegundoElTablero(String[][] tableroOrigen, String[][] tableroCopia){
+        // Lógica para copiar el estado del tablero original al tablero de copia
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
                 tableroCopia[i][j] = tableroOrigen[i][j];
             }
         }
     }
 
-    public String[] MovimientosFichas2(String[][] tableroM)
-    {
+/**
+ * Calcula los movimientos de las fichas blancas en el tablero actual.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @return Un arreglo de cadenas con los movimientos posibles de las fichas blancas.
+ */
 
+    public String[] MovimientosFichas2(String[][] tableroM){
         String posicionesTotales = "";
-
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
                 String ficha = fichaCasilla(tableroM, i, j);
 
-                if (ficha.equals("2_torre"))
-                {
+                if (ficha.equals("2_torre")){
                     posicionesTotales += cambiarPalabra(movimientoTorre2Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("2_alfil"))
-                {
+                else if (ficha.equals("2_alfil")){
                     posicionesTotales += cambiarPalabra(movimientoAlfil2Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("2_reina"))
-                {
+                else if (ficha.equals("2_reina")){
                     posicionesTotales += cambiarPalabra(movimientoReina2Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("2_caballo"))
-                {
+                else if (ficha.equals("2_caballo")){
                     posicionesTotales += cambiarPalabra(movimientoCaballo2Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("2_rey"))
-                {
+                else if (ficha.equals("2_rey")){
                     posicionesTotales += cambiarPalabra(movimientoRey2Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("2_peon"))
-                {
+                else if (ficha.equals("2_peon")){
                     posicionesTotales += cambiarPalabra(movimientoPeon2Ataque(tableroM, i, j));
                 }
 
@@ -193,36 +208,37 @@ public class Movimientos {
 
     }
 
-    //Funcion para atacar con blancas.
-    public String[] ataqueFicha2(String[][] tableroM, int i, int j)
-    {
 
+/**
+ * Calcula los posibles movimientos de ataque de una ficha en una posición específica para las piezas negras.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param i        La fila de la posición de la ficha.
+ * @param j        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para las piezas negras.
+ */
+    public String[] ataqueFicha2(String[][] tableroM, int i, int j){
+        // Lógica para calcular movimientos de ataque de piezas negras
         String posicionesTotales = "";
 
         String ficha = fichaCasilla(tableroM, i, j);
 
-        if (ficha.equals("B_torre"))
-        {
+        if (ficha.equals("2_torre")){
             posicionesTotales += cambiarPalabra(movimientoTorre2Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("B_alfil"))
-        {
+        else if (ficha.equals("2_alfil")){
             posicionesTotales += cambiarPalabra(movimientoAlfil2Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("B_reina"))
-        {
+        else if (ficha.equals("2_reina")){
             posicionesTotales += cambiarPalabra(movimientoReina2Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("B_caballo"))
-        {
+        else if (ficha.equals("2_caballo")){
             posicionesTotales += cambiarPalabra(movimientoCaballo2Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("B_rey"))
-        {
+        else if (ficha.equals("2_rey")){
             posicionesTotales += cambiarPalabra(movimientoRey2Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("B_peon"))
-        {
+        else if (ficha.equals("2_peon")){
             posicionesTotales += cambiarPalabra(movimientoPeon2Ataque(tableroM, i, j));
         }
 
@@ -231,158 +247,144 @@ public class Movimientos {
 
     }
 
-    public String[] ataqueFicha1(String[][] tableroM, int i, int j)
-    {
+/**
+ * Calcula los posibles movimientos de ataque de una ficha en una posición específica para las piezas blancas.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param i        La fila de la posición de la ficha.
+ * @param j        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para las piezas blancas.
+ */
 
+    public String[] ataqueFicha1(String[][] tableroM, int i, int j){
+        // Lógica para calcular movimientos de ataque de piezas blancas
         String posicionesTotales = "";
-
         String ficha = fichaCasilla(tableroM, i, j);
 
-        if (ficha.equals("1_torre"))
-        {
+        if (ficha.equals("1_torre")){
             posicionesTotales += cambiarPalabra(movimientoTorre1Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("1_alfil"))
-        {
+        else if (ficha.equals("1_alfil")){
             posicionesTotales += cambiarPalabra(movimientoAlfil1Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("1_reina"))
-        {
+        else if (ficha.equals("1_reina")){
             posicionesTotales += cambiarPalabra(movimientoReina1Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("1_caballo"))
-        {
+        else if (ficha.equals("1_caballo")){
             posicionesTotales += cambiarPalabra(movimientoCaballo1Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("1_rey"))
-        {
+        else if (ficha.equals("1_rey")){
             posicionesTotales += cambiarPalabra(movimientoRey1Ataque(tableroM, i, j));
         }
-        else if (ficha.equals("1_peon"))
-        {
+        else if (ficha.equals("1_peon")){
             posicionesTotales += cambiarPalabra(movimientoPeon1Ataque(tableroM, i, j));
         }
-
         String[] arrayTotal = posicionesTotales.split("_");
         return arrayTotal;
-
     }
 
-    public String[] MovimientosFichas1(String[][] tableroM)
-    {
-
+/**
+ * Calcula los posibles movimientos de las fichas blancas en el tablero actual.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @return Un arreglo de cadenas con los movimientos posibles de las fichas blancas.
+ */
+    public String[] MovimientosFichas1(String[][] tableroM){
         String posicionesTotales = "";
 
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
                 String ficha = fichaCasilla(tableroM, i, j);
 
-                if (ficha.equals("A_torre")) {
+                if (ficha.equals("1_torre")) {
 
                     posicionesTotales += cambiarPalabra(movimientoTorre1Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("A_alfil"))
-                {
+                else if (ficha.equals("1_alfil")){
                     posicionesTotales += cambiarPalabra(movimientoAlfil1Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("A_reina"))
-                {
+                else if (ficha.equals("1_reina")){
                     posicionesTotales += cambiarPalabra(movimientoReina1Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("A_caballo"))
-                {
+                else if (ficha.equals("1_caballo")){
                     posicionesTotales += cambiarPalabra(movimientoCaballo1Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("A_rey"))
-                {
+                else if (ficha.equals("1_rey")){
                     posicionesTotales += cambiarPalabra(movimientoRey1Ataque(tableroM, i, j));
                 }
-                else if (ficha.equals("A_peon"))
-                {
+                else if (ficha.equals("1_peon")){
                     posicionesTotales += cambiarPalabra(movimientoPeon1Ataque(tableroM, i, j));
                 }
-
             }
         }
         String[] arrayTotal = posicionesTotales.split("_");
         return arrayTotal;
-
     }
 
-    private String cambiarPalabra(String[] array)
-    {
+    private String cambiarPalabra(String[] array){
         String palabra = "";
 
-        for (int i = 0; i < array.length; i++)
-        {
+        for (int i = 0; i < array.length; i++){
             palabra += array[i] + "_";
         }
         return palabra;
     }
 
-    public String[] movimientosFichas(String[][] tableroM, String posicion)
-    {
+    public String[] movimientosFichas(String[][] tableroM, String posicion){
         int x = Character.getNumericValue(posicion.charAt(1));
         int y = Character.getNumericValue(posicion.charAt(0));
         String ficha = fichaCasilla(tableroM, y, x);
 
-        if (ficha.equals("A_peon"))
-        {
+        if (ficha.equals("1_peon")){
             return movimientoPeon1(tableroM, y, x);
         }
-        else if (ficha.equals("B_peon"))
-        {
+        else if (ficha.equals("2_peon")){
             return movimientoPeon2(tableroM, y, x);
         }
-        else if (ficha.equals("A_torre"))
-        {
+        else if (ficha.equals("1_torre")){
             return movimientoTorre1(tableroM, y, x);
         }
-        else if (ficha.equals("B_torre"))
-        {
+        else if (ficha.equals("2_torre")){
             return movimientoTorre2(tableroM, y, x);
         }
-        else if (ficha.equals("A_alfil"))
-        {
+        else if (ficha.equals("1_alfil")){
             return movimientoAlfil1(tableroM, y, x);
         }
-        else if (ficha.equals("B_alfil"))
-        {
+        else if (ficha.equals("2_alfil")){
             return movimientoAlfil2(tableroM, y, x);
         }
-        else if (ficha.equals("A_caballo"))
-        {
+        else if (ficha.equals("1_caballo")){
             return movimientoCaballo1(tableroM, y, x);
         }
-        else if (ficha.equals("B_caballo"))
-        {
+        else if (ficha.equals("2_caballo")){
             return movimientoCaballo2(tableroM, y, x);
         }
-        else if (ficha.equals("A_reina"))
-        {
+        else if (ficha.equals("1_reina")){
             return movimientoReina1(tableroM, y, x);
         }
-        else if (ficha.equals("B_reina"))
-        {
+        else if (ficha.equals("2_reina")){
             return movimientoReina2(tableroM, y, x);
         }
-        else if (ficha.equals("A_rey"))
-        {
+        else if (ficha.equals("1_rey")){
             return movimientoRey1(tableroM, y, x);
         }
-        else if (ficha.equals("B_rey"))
-        {
+        else if (ficha.equals("2_rey")){
             return movimientoRey2(tableroM, y, x);
         }
-
         return null;
     }
 
-    //Funcion para el movimiento del peon de las fichas negras
+/**
+ * Calcula los movimientos posibles de una ficha peón para las piezas negras.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con los movimientos posibles para el peón negro.
+ */
     private String[] movimientoPeon1(String[][] tableroM, int y, int x)
     {
+        // Lógica para calcular movimientos del peón negro
         String posicionesPosibles = "";
 
         if (tableroM[y - 1][x].equals(""))
@@ -428,9 +430,17 @@ public class Movimientos {
 
     }
 
-    //Funcion de ataque peon negro
+/**
+* Calcula los movimientos de ataque posibles para un peón negro en una posición específica.
+*
+* @param tableroM El tablero de ajedrez actual.
+* @param y        La fila de la posición de la ficha.
+* @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el peón negro.
+*/
     private String[] movimientoPeon1Ataque(String[][] tableroM, int y, int x)
     {
+        // Lógica para calcular movimientos de ataque del peón negro
         String posicionesPosibles = "";
         try
         {
@@ -453,9 +463,17 @@ public class Movimientos {
 
     }
 
-    //Funcon ataque peon blanco
+/**
+* Calcula los movimientos de ataque posibles para un peón blanco en una posición específica.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el peón blanco.
+ */
     private String[] movimientoPeon2Ataque(String[][] tableroM, int y, int x)
     {
+        // Lógica para calcular movimientos de ataque del peón blanco
         String posicionesPosibles = "";
 
         try
@@ -479,9 +497,17 @@ public class Movimientos {
 
     }
 
-    //Funcion de los movimientos de los peones blnacos
+/**
+ * Calcula los movimientos posibles de un peón blanco en el tablero actual.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con los movimientos posibles para el peón blanco.
+ */
     private String[] movimientoPeon2(String[][] tableroM, int y, int x)
     {
+        // Lógica para calcular movimientos del peón blanco
         String posicionesPosibles = "";
 
         if (tableroM[y + 1][x].equals(""))
@@ -527,7 +553,14 @@ public class Movimientos {
         return arrayPosicionesPosibles;
     }
 
-    //Funcion movimiento de la torre negra
+/**
+* Calcula los movimientos posibles de una torre negra en el tablero actual.
+*
+* @param tableroM El tablero de ajedrez actual.
+* @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con los movimientos posibles para la torre negra.
+*/
     private String[] movimientoTorre1(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -652,7 +685,14 @@ public class Movimientos {
 
     }
 
-    //Funcion de ataque de la torre negra.
+/**
+ * Calcula los movimientos de ataque posibles para una torre negra en una posición específica.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para la torre negra.
+ */
     private String[] movimientoTorre1Ataque(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -780,7 +820,14 @@ public class Movimientos {
         return arrayPosicionesPosibles;
     }
 
-    //Funcion ataque torre blanca.
+/**
+ * Calcula los movimientos de ataque posibles para una torre blanca en una posición específica.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para la torre blanca.
+ */
     private String[] movimientoTorre2Ataque(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -910,6 +957,14 @@ public class Movimientos {
     }
 
     //Funcion moviento torre blanca
+/**
+ * Calcula los movimientos posibles de una torre blanca en el tablero actual.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la ficha.
+ * @param x        La columna de la posición de la ficha.
+ * @return Un arreglo de cadenas con los movimientos posibles para la torre blanca.
+ */
     private String[] movimientoTorre2(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -1034,7 +1089,14 @@ public class Movimientos {
 
     }
 
-    //Funcion del alfil negro
+/**
+ * Calcula los movimientos posibles en diagonal hacia arriba y abajo a la derecha e izquierda de un alfil en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del alfil.
+ * @param x        La columna de la posición del alfil.
+ * @return Un arreglo de cadenas con las posiciones posibles para el alfil en la diagonal.
+ */
     private String[] movimientoAlfil1(String[][] tableroM, int y, int x)
     {
         boolean seguir;
@@ -1152,7 +1214,14 @@ public class Movimientos {
 
     }
 
-    //Funcion de ataque del alfil negro
+/**
+ * Calcula los movimientos posibles en diagonal hacia arriba y abajo a la derecha e izquierda de un alfil para ataques en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del alfil.
+ * @param x        La columna de la posición del alfil.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el alfil en la diagonal.
+ */
     private String[] movimientoAlfil1Ataque(String[][] tableroM, int y, int x) {
         boolean seguir;
         int i;
@@ -1510,7 +1579,14 @@ public class Movimientos {
 
     }
 
-    //Funcion movimiento caballo negro
+/**
+ * Calcula los movimientos posibles del caballo negro en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del caballo.
+ * @param x        La columna de la posición del caballo.
+ * @return Un arreglo de cadenas con las posiciones posibles para el caballo negro.
+ */
     private String[] movimientoCaballo1(String[][] tableroM, int y, int x) {
         String posicionesPosibles = "";
 
@@ -1605,7 +1681,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //Funcion ataque caballo negro
+/**
+ * Calcula los movimientos de ataque posibles del caballo negro en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del caballo.
+ * @param x        La columna de la posición del caballo.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el caballo negro.
+ */
     private String[] movimientoCaballo1Ataque(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -1686,7 +1769,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //Funcion caballo blanco comer
+/**
+ * Calcula los movimientos de ataque posibles del caballo blanco en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del caballo.
+ * @param x        La columna de la posición del caballo.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el caballo blanco.
+ */
     private String[] movimientoCaballo2Ataque(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -1767,7 +1857,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //Funcion mover caballo blanco
+/**
+ * Calcula los movimientos posibles del caballo blanco en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del caballo.
+ * @param x        La columna de la posición del caballo.
+ * @return Un arreglo de cadenas con las posiciones posibles para el caballo blanco.
+ */
     private String[] movimientoCaballo2(String[][] tableroM, int y, int x)
     {
         String posicionesPosibles = "";
@@ -1858,7 +1955,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //Funcion movimiento reina negra
+/**
+ * Calcula los movimientos posibles de la reina negra en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la reina.
+ * @param x        La columna de la posición de la reina.
+ * @return Un arreglo de cadenas con las posiciones posibles para la reina negra.
+ */
     private String[] movimientoReina1(String[][] tableroM, int y, int x)
     {
         String[] movimientoDiagonal = movimientoAlfil1(tableroM, y, x);
@@ -1885,7 +1989,14 @@ public class Movimientos {
         return movimientosReina;
     }
 
-    //Funcion ataque reina negra
+/**
+ * Calcula los movimientos de ataque posibles de la reina negra en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la reina.
+ * @param x        La columna de la posición de la reina.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para la reina negra.
+ */
     private String[] movimientoReina1Ataque(String[][] tableroM, int y, int x)
     {
         String[] movimientoDiagonal = movimientoAlfil1Ataque(tableroM, y, x);
@@ -1912,7 +2023,14 @@ public class Movimientos {
         return movimientosReina;
     }
 
-    //Funcion ataque reina blanca
+/**
+ * Calcula los movimientos de ataque posibles de la reina blanca en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la reina.
+ * @param x        La columna de la posición de la reina.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para la reina blanca.
+ */
     private String[] movimientoReina2Ataque(String[][] tableroM, int y, int x)
     {
         String[] movimientoDiagonal = movimientoAlfil2Ataque(tableroM, y, x);
@@ -1939,7 +2057,14 @@ public class Movimientos {
         return movimientosReina;
     }
 
-    //funcion movimiento reina blanca
+/**
+ * Calcula los movimientos posibles de la reina blanca en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición de la reina.
+ * @param x        La columna de la posición de la reina.
+ * @return Un arreglo de cadenas con las posiciones posibles para la reina blanca.
+ */
     private String[] movimientoReina2(String[][] tableroM, int y, int x)
     {
         String[] movimientoDiagonal = movimientoAlfil2(tableroM, y, x);
@@ -1966,7 +2091,14 @@ public class Movimientos {
         return movimientosReina;
     }
 
-    //funcion movimiento rey negro
+/**
+ * Calcula los movimientos posibles del rey negro en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del rey.
+ * @param x        La columna de la posición del rey.
+ * @return Un arreglo de cadenas con las posiciones posibles para el rey negro.
+ */
     private String[] movimientoRey1(String[][] tableroM, int y, int x)
     {
 
@@ -2069,7 +2201,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //Funcion ataque rey negro
+/**
+ * Calcula los movimientos de ataque posibles del rey negro en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del rey.
+ * @param x        La columna de la posición del rey.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el rey negro.
+ */
     private String[] movimientoRey1Ataque(String[][] tableroM, int y, int x)
     {
 
@@ -2163,7 +2302,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //Funcion ataque rey blanco
+/**
+ * Calcula los movimientos de ataque posibles del rey blanco en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del rey.
+ * @param x        La columna de la posición del rey.
+ * @return Un arreglo de cadenas con las posiciones de ataque posibles para el rey blanco.
+ */
     private String[] movimientoRey2Ataque(String[][] tableroM, int y, int x)
     {
 
@@ -2252,7 +2398,14 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
-    //funcion mover rey blanco
+/**
+ * Calcula los movimientos posibles del rey blanco en el tablero de ajedrez.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición del rey.
+ * @param x        La columna de la posición del rey.
+ * @return Un arreglo de cadenas con las posiciones posibles para el rey blanco.
+ */
     private String[] movimientoRey2(String[][] tableroM, int y, int x)
     {
 
@@ -2341,39 +2494,66 @@ public class Movimientos {
         return arregloPosicionesPosibles;
     }
 
+/**
+ * Obtiene el tipo de ficha en una casilla del tablero.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición.
+ * @param x        La columna de la posición.
+ * @return El tipo de ficha en la posición dada del tablero.
+ */
     private String fichaCasilla(String[][] tableroM, int y, int x)
     {
         return tableroM[y][x];
     }
 
-    //Funcion para comprobar que la ficha es negra
+/**
+ * Verifica si la ficha en la casilla dada es negra.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición.
+ * @param x        La columna de la posición.
+ * @return true si la ficha en la posición es negra, de lo contrario false.
+ */
     private boolean fichaNegra(String[][] tableroM, int y, int x)
     {
         if (!tableroM[y][x].equals(""))
         {
-            return (tableroM[y][x].charAt(0) == 'B') ? true : false;
+            return (tableroM[y][x].charAt(0) == '2') ? true : false;
         }
         return false;
     }
 
-    //funcion para comprobar que la ficha es blnaca
+/**
+ * Verifica si la ficha en la casilla dada es blanca.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @param y        La fila de la posición.
+ * @param x        La columna de la posición.
+ * @return true si la ficha en la posición es blanca, de lo contrario false.
+ */
     private boolean FichaBlanca(String[][] tableroM, int y, int x)
     {
         if (!tableroM[y][x].equals(""))
         {
-            return (tableroM[y][x].charAt(0) == 'A') ? true : false;
+            return (tableroM[y][x].charAt(0) == '1') ? true : false;
         }
         return false;
     }
 
-    //Funcion para ver si el rey negro esta en jaque.
+/**
+ * Verifica si el rey negro está en jaque.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @return true si el rey negro está en jaque, de lo contrario false.
+ */
     private boolean rey1Jaque(String[][] tableroM)
     {
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (fichaCasilla(tableroM, i, j).equals("A_rey"))
+                if (fichaCasilla(tableroM, i, j).equals("1_rey"))
                 {
                     String posicionRey = "" + i + "" + j;
 
@@ -2394,14 +2574,19 @@ public class Movimientos {
         return false;
     }
 
-    //Funcion comprobar rey blanco esta en jaque
+/**
+ * Verifica si el rey blanco está en jaque.
+ *
+ * @param tableroM El tablero de ajedrez actual.
+ * @return true si el rey blanco está en jaque, de lo contrario false.
+ */
     private boolean rey2Jaque(String[][] tableroM)
     {
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (fichaCasilla(tableroM, i, j).equals("B_rey"))
+                if (fichaCasilla(tableroM, i, j).equals("2_rey"))
                 {
                     String posicionRey = "" + i + "" + j;
 

@@ -1,3 +1,7 @@
+/**
+ * Controlador del juego de ajedrez.
+ * Implementa la lógica del juego y gestiona las interacciones entre la vista y el modelo.
+ */
 package Controlador;
 
 import Modelo.Bot;
@@ -10,8 +14,28 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class Controlador implements ActionListener {
+// Importaciones de clases y paquetes necesarios
+public class Controlador implements ActionListener
+{
     
+	//Patron singleton
+	 private static Controlador instancia;
+/**
+ * Método estático para obtener la instancia única del Controlador (Singleton).
+ *
+ * @return La instancia única del Controlador.
+ */
+    public static synchronized Controlador getInstancia() {
+        // Implementación del patrón Singleton
+        if (instancia == null) {
+            instancia = new Controlador();
+        }
+        return instancia;
+    }
+
+/**
+ * Representa si el enroque para el rey del jugador 1 está disponible.
+ */
     public static boolean enrroqueRey1 = true;
     public static boolean enrroqueTorreIzquierda1 = true;
     public static boolean enrroqueTorreDerecha1 = true;
@@ -19,8 +43,11 @@ public class Controlador implements ActionListener {
     public static boolean enrroqueTorreIzquierda2 = true;
     public static boolean enrroqueTorreDerecha2 = true;
 
+/**
+ * Representa el estado actual del tablero de juego.
+ */
     public static String[][] tablero = new String[8][8];
-    private char turnoJugador = 'A';
+    private char turnoJugador = '1';
     private String viejaPosicion = null;
     private String nuevaPoscion = null;
     private String posicionActual;
@@ -29,7 +56,12 @@ public class Controlador implements ActionListener {
     Movimientos movimientos;
     Bot bot = new Bot();
 
+/**
+ * Constructor de la clase Controlador.
+ * Inicializa el tablero, crea la vista del tablero y añade eventos.
+ */
     public Controlador() {
+        // Implementación del constructor
         tableroIniciar();
         VistaTablero vista = new VistaTablero();
         vista.setVisible(true);
@@ -45,27 +77,27 @@ public class Controlador implements ActionListener {
         }
 
         for (int i = 0; i < 8; i++) {
-            tablero[1][i] = "B_peon";
-            tablero[6][i] = "A_peon";
+            tablero[1][i] = "2_peon";
+            tablero[6][i] = "1_peon";
         }
 
-        tablero[0][0] = "B_torre";
-        tablero[0][1] = "B_caballo";
-        tablero[0][2] = "B_alfil";
-        tablero[0][3] = "B_reina";
-        tablero[0][4] = "B_rey";
-        tablero[0][5] = "B_alfil";
+        tablero[0][0] = "2_torre";
+        tablero[0][1] = "2_caballo";
+        tablero[0][2] = "2_alfil";
+        tablero[0][3] = "2_reina";
+        tablero[0][4] = "2_rey";
+        tablero[0][5] = "2_alfil";
         tablero[0][6] = "B_caballo";
-        tablero[0][7] = "B_torre";
+        tablero[0][7] = "2_torre";
 
-        tablero[7][0] = "A_torre";
-        tablero[7][1] = "A_caballo";
-        tablero[7][2] = "A_alfil";
-        tablero[7][3] = "A_reina";
-        tablero[7][4] = "A_rey";
-        tablero[7][5] = "A_alfil";
-        tablero[7][6] = "A_caballo";
-        tablero[7][7] = "A_torre";
+        tablero[7][0] = "1_torre";
+        tablero[7][1] = "1_caballo";
+        tablero[7][2] = "1_alfil";
+        tablero[7][3] = "1_reina";
+        tablero[7][4] = "1_rey";
+        tablero[7][5] = "1_alfil";
+        tablero[7][6] = "1_caballo";
+        tablero[7][7] = "1_torre";
     }
 
     private void añadirEventos() {
@@ -142,9 +174,15 @@ public class Controlador implements ActionListener {
         VistaTablero.c77.addActionListener(this);
     }
 
+/**
+ * Realiza las acciones correspondientes cuando se activa un evento en la interfaz.
+ *
+ * @param ae El evento de acción que se ha activado.
+ */
     @Override
+
     public void actionPerformed(ActionEvent ae) {
-        if (turnoJugador == 'A') {
+        if (turnoJugador == '1') {
             posicionActual = getBotonPosicion(ae.getSource());
 
             if (comprobarFichaBlanca(posicionActual)) {
@@ -215,7 +253,7 @@ public class Controlador implements ActionListener {
 
     private void comprobarPeonUltimaFila() {
         for (int i = 0; i < 8; i++) {
-            if (tablero[0][i].equals("A_peon")) {
+            if (tablero[0][i].equals("1_peon")) {
                 //Se mostrara la tabla de eleccion de ficha
                 elegirPeon();
                 tablero[0][i] = fichaElegida;
@@ -223,8 +261,8 @@ public class Controlador implements ActionListener {
                 boton(posicion).setIcon(imagenElegida);
             }
 
-            if (tablero[7][i].equals("B_peon")) {
-                tablero[7][i] = "B_reina";
+            if (tablero[7][i].equals("2_peon")) {
+                tablero[7][i] = "2_reina";
                 String posicion = "7" + i;
                 boton(posicion).setIcon(new ImageIcon(getClass().getResource("/Imagenes/ReinaNegra.png")));
             }
@@ -243,7 +281,7 @@ public class Controlador implements ActionListener {
         int xA = Character.getNumericValue(posAntigua.charAt(1));
         int yA = Character.getNumericValue(posAntigua.charAt(0));
 
-        if (tablero[yN][xN].equals("A_rey") || tablero[yN][xN].equals("B_rey")) {
+        if (tablero[yN][xN].equals("1_rey") || tablero[yN][xN].equals("2_rey")) {
             if (xA + 2 == xN) {
                 //Derecha
                 tablero[yN][xN - 1] = tablero[yN][7];
@@ -538,7 +576,7 @@ public class Controlador implements ActionListener {
         int x = Character.getNumericValue(posicion.charAt(1));
         int y = Character.getNumericValue(posicion.charAt(0));
         if (!tablero[y][x].equals("")) {
-            return (tablero[y][x].charAt(0) == 'A') ? true : false;
+            return (tablero[y][x].charAt(0) == '1') ? true : false;
         }
         return false;
     }
