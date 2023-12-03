@@ -1,4 +1,4 @@
-# Ajedrez-nuevo
+# Ajedrez
 El trabajo que vamos a realizar es modelar el juego del ajedrez. 
 El tablero que vamos a usar es el siguiente:
 
