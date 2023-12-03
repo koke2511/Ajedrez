@@ -14,19 +14,16 @@ Alfil: Se mueve diagonalmente, cualquier cantidad de casillas.
 Caballo: Realiza un movimiento especial en forma de "L". Se mueve dos casillas en una dirección (horizontal o vertical) y luego una casilla en una dirección perpendicular.
 Peón: Se mueve hacia adelante una casilla en la columna en la que se encuentra, en su primer movimiento tiene la opción de avanzar dos casillas. Además, capturan en diagonal moviéndose una casilla hacia adelante en diagonal hacia una pieza enemiga.
 
+Además, como se puede observar, tenemos dos casillas de “Restart” y “Exit”. Si pulsamos la de “Restart”, esta hará que se reinicie automáticamente la partida. Y si pulsamos la de “Exit” automáticamente nos sacará del juego. También hay otra selección que es “Aceptar”. Esta está implícita ya que solo se ve cuando le damos a una de las dos casillas anteriores para cerciorarse de que queremos elegir esa opción y no nos hemos equivocado. 
+
+
+
 La estructura que vamos a seguir es la que se encuentra representada en el siguiente diagrama de clases:
 
-![imagen](https://github.com/koke2511/Ajedrez-nuevo/assets/62717610/7389f7e6-5616-49e5-a678-29b1ab1ddb86)
+![imagen](https://github.com/koke2511/Ajedrez/assets/62717610/be047839-e2ca-4a4e-a9d6-3a89b3ca007b)
 
  
-Los primeros que seguiremos es la creación de clases. El tipo de lo que será cada atributo está definido junto a ellos. 
-Clase Tablero.
-Tiene unos atributos que serán privados como: casillas: Casillas [], turnoBlancas : boolean. 
-Los atributos públicos serán: moverPieza : boolean, inicializarPieza (pieza Casilla[]): void, imprimirPieza(): void, estaVacio (): boolean y validarDestino.
-Clase Casilla.
-Como atributos privados tiene: blanca: boolean, coordenadaX : int y coordenadaY: int. 
-Como atributos públicos tiene: mover (origen Casilla, tablero Tablero): boolena, validarDesplazamiento y mover (origen Casilla, destino Casilla, tablero Tablero): boolean.
-Las clases de las piezas (Peón, Alfil, Caballo, Dama, Torre, Rey) no tendrán ningún atributo en privado, todos serán públicos y tendrán los mismos atributos: mover (origen Casilla, destino Casilla): boolean y ValidarDesplazamiento. 
+Como podemos ver en el esquema UML las clases heredan de la clase Controlador. Y esta, hereda del main, donde se ejecuta el código
 
 
 
